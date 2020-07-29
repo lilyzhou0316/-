@@ -1,0 +1,116 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-27 17:12:39
+ * @LastEditTime: 2020-07-28 12:58:29
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/无缝滑屏/01布局.html
+-->
+
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>Title Page</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .img-list {
+            /* 去除li前的小圆点效果 */
+            list-style: none;
+        }
+
+        .carousel-wrap>.img-list>li>a,
+        .carousel-wrap>.img-list>li>a>img {
+            /* 去除图片之间空隙 */
+            display: block;
+        }
+
+        .carousel-wrap>.img-list>li>a>img {
+            width: 100%;
+        }
+
+        .carousel-wrap>.img-list>li {
+            float: left;
+            /* 每个图片基于父元素的宽度都是20% */
+            width: 20%;
+        }
+
+        .carousel-wrap>.img-list {
+            /* 放下5张图片 */
+            width: 500%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    document.addEventListener('touchstart', function (ev) {
+        ev = ev || event
+        ev.preventDefault() //禁止所有事件的默认行为
+
+    })
+
+    window.onload = function () {
+
+    }
+</script>
+
+<body>
+    <div id="wrap">
+        <div class="carousel-wrap">
+            <ul class="img-list">
+                <li>
+                    <a href="javascript:;">
+                        <img src="../../day03/无缝滑屏/img/01.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <img src="../../day03/无缝滑屏/img/02.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <img src="../../day03/无缝滑屏/img/03.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <img src="../../day03/无缝滑屏/img/04.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <img src="../../day03/无缝滑屏/img/05.jpg" alt="">
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- jQuery
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    Bootstrap JavaScript 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+</body>
+
+</html>

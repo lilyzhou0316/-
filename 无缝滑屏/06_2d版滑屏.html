@@ -1,0 +1,257 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-28 12:59:55
+ * @LastEditTime: 2020-07-28 16:00:58
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/无缝滑屏/02布局（动态）.html
+-->
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>Title Page</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-wrap {
+            position: relative;
+        }
+
+        .carousel-wrap>.img-list>li>a,
+        .carousel-wrap>.img-list>li>a>img {
+            /* 去除图片之间空隙 */
+            display: block;
+        }
+
+        .carousel-wrap>.img-list>li>a>img {
+            width: 100%;
+        }
+
+        .carousel-wrap>.img-list>li {
+            float: left;
+        }
+
+        .carousel-wrap>.img-list {
+            overflow: hidden;
+            /* 去除li前的圆点效果 */
+            list-style: none;
+            position: absolute;
+        }
+
+        .carousel-wrap>.points-wrap {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .carousel-wrap>.points-wrap>span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin: 0 4px;
+        }
+
+        .carousel-wrap>.points-wrap>span.active {
+            background-color: pink;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    window.onload = function () {
+        //全面禁止所有事件的默认行为
+        document.addEventListener('touchstart', function (ev) {
+            ev = ev || event
+            ev.preventDefault()
+        }, {
+            passive: false
+        })
+
+
+        let arr = [
+            '../../day03/无缝滑屏/img/01.jpg',
+            '../../day03/无缝滑屏/img/02.jpg',
+            '../../day03/无缝滑屏/img/03.jpg',
+            '../../day03/无缝滑屏/img/04.jpg',
+            '../../day03/无缝滑屏/img/05.jpg'
+        ]
+
+        carousel(arr)
+
+        function carousel(arr) {
+            /* 
+
+            1.布局 
+            
+            */
+            let carouselWrap = document.querySelector('.carousel-wrap')
+            if (carouselWrap) { //如果有轮播图外层容器，给它添加ul>li元素
+                let ulNode = document.createElement('ul')
+                let styleNode = document.createElement('style')
+                //给ul添加样式
+                ulNode.classList.add('img-list')
+
+                for (let i = 0; i < arr.length; i++) {
+                    ulNode.innerHTML +=
+                        '<li><a href = "javascript:;"><img src = "' +
+                        arr[i] + '" alt = "" ></a> </li> '
+                }
+                //因为图片数量不固定，所以ul和li的width也是动态添加的
+                styleNode.innerHTML = '.carousel-wrap>.img-list>li{width:' + (100 / arr.length) + '%}' +
+                    '.carousel-wrap>.img-list {width: ' + (arr.length * 100) + '%;}'
+                carouselWrap.appendChild(ulNode)
+                document.head.appendChild(styleNode)
+
+                //因为ul的定位为absolute,此时就没有高度了，需要将carouselWrap的高度设置为图片高度
+                let imgNode = document.querySelector('.carousel-wrap>.img-list>li>a>img')
+                //但是因为图片加载需要一点时间，所以拿到imgNode.offsetHeight的值要用setTimeout延时回调
+                setTimeout(() => {
+                    carouselWrap.style.height = imgNode.offsetHeight + 'px'
+                }, 100)
+
+                /* 
+                3.小圆点
+                 */
+                let pointsWrap = document.querySelector('.carousel-wrap>.points-wrap')
+                if (pointsWrap) { //如果有这个元素才加上span
+                    for (let i = 0; i < arr.length; i++) {
+                        if (i == 0) {
+                            pointsWrap.innerHTML = '<span class="active"></span>'
+                        } else {
+                            pointsWrap.innerHTML +=
+                                '<span></span>'
+                        }
+
+                    }
+                }
+                //拿到所有span元素
+                let pointsSpan = document.querySelectorAll('.carousel-wrap>.points-wrap>span')
+
+
+
+                /* 
+                2. 滑屏
+
+                滑屏逻辑：
+                1）先拿到元素一开始的位置
+                2）拿到手指一开始点击的位置
+                3）拿到手指滑动（move）时的实时距离
+                4）将手指移动的距离加给元素
+                 */
+
+                //手指的初始位置
+                let startX = 0
+                //元素的初始位置
+                let elementX = 0
+                //手指移动的距离
+                let diffX = 0
+                //translateX的初始值
+                let translateX = 0
+
+                carouselWrap.addEventListener('touchstart', ev => {
+                    ev = ev || event
+                    ulNode.style.transition = "none" //给拖动取消过渡效果
+                    //从手指相关的事件中取出startX
+                    let touchC = ev.changedTouches[0]
+                    startX = touchC.clientX
+                    //因为需要被滑动的元素是ul,所以取得它的offsetLeft
+                    //注意：offsetLeft和transform不在一个涂层，所以用transform时不能用offsetLeft
+                    // elementX = ulNode.offsetLeft
+                    elementX = translateX
+                })
+
+                carouselWrap.addEventListener('touchmove', ev => {
+                    ev = ev || event
+                    //从手指相关的事件中取出手指移动的实时位置
+                    let touchC = ev.changedTouches[0]
+                    let currentX = touchC.clientX
+                    //求得手指移动的距离
+                    diffX = currentX - startX
+                    //将手指移动的距离给被滑动的元素,即为元素当前实时的left值
+                    // ulNode.style.left = elementX + diffX + 'px'
+                    translateX = elementX + diffX
+                    ulNode.style.transform = "translate(" + translateX + "px)"
+
+                })
+
+                carouselWrap.addEventListener('touchend', ev => {
+                    ev = ev || event
+                    //此时index表示的是ul元素滑动的方向，大于0,ul往左滑手指往右滑，小于0,ul往右滑手指往左滑
+                    //document.documentElement.clientWidth为视口宽度（即等于一张图片的宽度）
+                    let index = translateX / document.documentElement.clientWidth
+                    //如果手指滑动的距离达到一张图片的一半，则换到下一张图片
+                    index = Math.round(index) //四舍五入
+
+                    //图片超出范围时的控制
+                    if (index > 0) { //即让第一张图片往右滑时
+                        index = 0
+                    } else if (index < 1 - arr.length) { //即让最后一张图片往左滑时
+                        index = 1 - arr.length
+                    }
+
+                    //给当前的图片的小圆点样式设置为active，移除其它小圆点样式
+                    for (let i = 0; i < pointsSpan.length; i++) {
+                        pointsSpan[i].classList.remove('active')
+
+                    }
+                    pointsSpan[-index].classList.add('active')
+
+                    translateX = index * (document.documentElement
+                        .clientWidth)
+
+                    ulNode.style.transition = "0.5s left" //给拖动加上过渡效果
+                    ulNode.style.transform = "translate(" + translateX + "px)"
+
+
+                })
+
+
+
+            }
+        }
+
+
+
+
+
+    }
+</script>
+
+<body>
+    <div id="wrap">
+        <div class="carousel-wrap">
+            <div class="points-wrap"></div>
+        </div>
+
+
+    </div>
+
+    <!-- jQuery
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    Bootstrap JavaScript 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+</body>
+
+</html>

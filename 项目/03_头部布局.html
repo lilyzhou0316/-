@@ -1,0 +1,78 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-29 15:03:24
+ * @LastEditTime: 2020-07-29 16:26:23
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/项目/02_使用绝对定位来模拟固定定位.html
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0" />
+    <title></title>
+    <link rel="stylesheet" href="../css/tai.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="head">
+            <div class="head-top">
+                <!-- logo -->
+                <h1 class="logo">
+                    <a href="http://www.atguigu.com">
+                        <!-- 对图片进行适配，需要设计图尺寸进行计算 -->
+                        <img src="../img/logo.png" alt="">
+                    </a>
+                </h1>
+                <!-- 面包屑导航breadcrumbs -->
+                <a href="javascript:;" class="head-breadcrumbs">
+
+                </a>
+                <!-- 按钮排 -->
+                <div class="head-btns">
+                    <a href="javascript:;" class="search">搜索</a>
+                    <a href="javascript:;" class="login">登陆</a>
+                    <a href="javascript:;" class="register">注册</a>
+                </div>
+            </div>
+            <div class="head-bottom">
+                <form action="" method="POST">
+                    <input type="text" placeholder="请输入关键字">
+                    <input type="submit" value="搜索">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    /* 
+	思路：
+	1.禁止系统滚动条--ev.preventDefault()
+	2.让滚动条出现在一个顶层元素（最外层元素）上，此时滚动条滚动的是顶层元素，而初始化块不受影响
+	而绝对定位元素是相对于初始化块定位，所以位置也不会随着滚动条滚动而变化
+	
+	 */
+    window.onload = function () {
+        document.addEventListener("touchstart", function (ev) {
+            ev = ev || event;
+            ev.preventDefault();
+        })
+
+        ;
+        (function () {
+            var styleNode = document.createElement("style");
+            var w = document.documentElement.clientWidth / 16;
+            styleNode.innerHTML = "html{font-size:" + w + "px!important}";
+            document.head.appendChild(styleNode);
+        })()
+
+        ;
+
+    }
+</script>
+
+</html>

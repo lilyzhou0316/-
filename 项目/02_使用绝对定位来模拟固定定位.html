@@ -1,0 +1,82 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-29 15:03:24
+ * @LastEditTime: 2020-07-29 15:08:04
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/项目/02_使用绝对定位来模拟固定定位.html
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0" />
+	<title></title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		#wrap {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		#wrap .head {
+			position: absolute;
+			width: 100%;
+			height: 100px;
+			background: pink;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrap">
+		<div class="head">
+
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	/* 
+	思路：
+	1.禁止系统滚动条--ev.preventDefault()
+	2.让滚动条出现在一个顶层元素（最外层元素）上，此时滚动条滚动的是顶层元素，而初始化块不受影响
+	而绝对定位元素是相对于初始化块定位，所以位置也不会随着滚动条滚动而变化
+	
+	 */
+	window.onload = function () {
+		document.addEventListener("touchstart", function (ev) {
+			ev = ev || event;
+			ev.preventDefault();
+		})
+
+		;
+		(function () {
+			var styleNode = document.createElement("style");
+			var w = document.documentElement.clientWidth / 16;
+			styleNode.innerHTML = "html{font-size" + w + "px!important}";
+			document.head.appendChild(styleNode);
+		})()
+
+		;
+		(function () {
+			for (var i = 0; i < 200; i++) {
+				//让顶层元素被内容撑开出现滚动条
+				wrap.innerHTML += "zdy<br/>";
+			}
+		})()
+	}
+</script>
+
+</html>

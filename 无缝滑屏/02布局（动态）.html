@@ -1,0 +1,121 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-28 12:59:55
+ * @LastEditTime: 2020-07-28 13:33:53
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/无缝滑屏/02布局（动态）.html
+-->
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>Title Page</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrap {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-wrap>.img-list>li>a,
+        .carousel-wrap>.img-list>li>a>img {
+            /* 去除图片之间空隙 */
+            display: block;
+        }
+
+        .carousel-wrap>.img-list>li>a>img {
+            width: 100%;
+        }
+
+        .carousel-wrap>.img-list>li {
+            float: left;
+        }
+
+        .carousel-wrap>.img-list {
+            overflow: hidden;
+            /* 去除li前的小圆点效果 */
+            list-style: none;
+            position: absolute;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    document.addEventListener('touchstart', function (ev) {
+        ev = ev || event
+        ev.preventDefault() //禁止所有事件的默认行为
+
+    })
+
+    window.onload = function () {
+        let arr = [
+            '../../day03/无缝滑屏/img/01.jpg',
+            '../../day03/无缝滑屏/img/02.jpg',
+            '../../day03/无缝滑屏/img/03.jpg',
+            '../../day03/无缝滑屏/img/04.jpg',
+            '../../day03/无缝滑屏/img/05.jpg'
+        ]
+
+        carousel(arr)
+
+        function carousel(arr) {
+            let carouselWrap = document.querySelector('.carousel-wrap')
+            if (carouselWrap) { //如果有轮播图外层容器，给它添加ul>li元素
+                let ulNode = document.createElement('ul')
+                let styleNode = document.createElement('style')
+                //给ul添加样式
+                ulNode.classList.add('img-list')
+
+                for (let i = 0; i < arr.length; i++) {
+                    ulNode.innerHTML +=
+                        '<li><a href = "javascript:;"><img src = "' +
+                        arr[i] + '" alt = "" ></a> </li> '
+                }
+                //因为图片数量不固定，所以ul和li的width也是动态添加的
+                styleNode.innerHTML = '.carousel-wrap>.img-list>li{width:' + (100 / arr.length) + '%}' +
+                    '.carousel-wrap>.img-list {width: ' + (arr.length * 100) + '%;}'
+                carouselWrap.appendChild(ulNode)
+                document.head.appendChild(styleNode)
+
+                //因为ul的定位为absolute,此时就没有高度了，需要将carouselWrap的高度设置为图片高度
+                let imgNode = document.querySelector('.carousel-wrap>.img-list>li>a>img')
+                //但是因为图片加载需要一点时间，所以拿到imgNode.offsetHeight的值要用setTimeout延时回调
+                setTimeout(() => {
+                    carouselWrap.style.height = imgNode.offsetHeight + 'px'
+                }, 100)
+
+
+            }
+        }
+
+    }
+</script>
+
+<body>
+    <div id="wrap">
+        <div class="carousel-wrap">
+
+        </div>
+    </div>
+
+    <!-- jQuery
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    Bootstrap JavaScript 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+</body>
+
+</html>

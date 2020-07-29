@@ -1,0 +1,58 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-29 14:41:06
+ * @LastEditTime: 2020-07-29 14:51:44
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/项目/01骨架.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            //1.全面禁止默认行为
+            document.addEventListener('touchstart', ev => {
+                ev = ev || event
+                ev.preventDefault()
+            }, {
+                passive: false
+            })
+
+            //2.创建style标签,设置一个适配方案(rem)
+            ;
+            (function () {
+                let styleNode = document.createElement('style')
+                //拿到视口宽度
+                let w = document.documentElement.clientWidth
+                //设置rem适配方案
+                styleNode.innerHTML = 'html{font-size:' + w / 16 + 'px!important}'
+                document.head.appendChild(style)
+            })()
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
