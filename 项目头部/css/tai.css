@@ -14,6 +14,7 @@ form,
 input {
   margin: 0;
   padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 ul {
   list-style: none;
@@ -129,5 +130,55 @@ body {
   color: #fff;
   font-size: 0.60740741rem;
   border-radius: 0.22222222rem;
+}
+#wrap .head .head-mask {
+  position: relative;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 2rem;
+  padding: 0.14814815rem 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+}
+#wrap .head .head-mask::before {
+  position: absolute;
+  content: "";
+  display: block;
+  top: 0;
+  width: 100%;
+  background: #6a6a6a;
+  height: 1px;
+}
+@media only screen and (-webkit-device-pixel-ratio: 2) {
+  #wrap .head .head-mask::before {
+    transform: scaleY(0.5);
+  }
+}
+@media only screen and (device-pixel-ratio: 2) {
+  #wrap .head .head-mask::before {
+    transform: scaleY(0.5);
+  }
+}
+@media only screen and (device-pixel-ratio: 3) {
+  #wrap .head .head-mask::before {
+    transform: scaleY(0.33333333);
+  }
+}
+@media only screen and (-webkit-device-pixel-ratio: 3) {
+  #wrap .head .head-mask::before {
+    transform: scaleY(0.33333333);
+  }
+}
+#wrap .head .head-mask li {
+  float: left;
+  width: 25%;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: 0.74074074rem;
+  text-align: center;
+}
+#wrap .head .head-mask li a {
+  color: #fff;
 }
 /*# sourceMappingURL=./tai.css.map */

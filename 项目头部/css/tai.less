@@ -15,6 +15,7 @@ input {
     //默认样式
     margin: 0;
     padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 ul {
@@ -54,6 +55,8 @@ body {
 
 //1rem等于多少位图像素
 @rem: 1080/16rem;
+//引入mixin中的less文件
+@import "mixin/px-1";
 
 #wrap {
     font-size: 16/@rem;
@@ -155,7 +158,8 @@ body {
                         //改变placeholder的字体样式
                         color: #333;
                     }
-                    &:focus{
+
+                    &:focus {
                         //当输入框获取焦点时，改变样式
                         background-color: #fff;
                     }
@@ -170,6 +174,33 @@ body {
                     color: #fff;
                     font-size: 41/@rem;
                     border-radius: 15/@rem;
+                }
+            }
+        }
+
+        .head-mask {
+            //1物理像素边框(引入mixin)
+            .px-1(#6a6a6a);
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 135/@rem;
+            padding: 10/@rem 0;
+            // border-top: 1px solid #6a6a6a;
+            background-color: rgba(0, 0, 0, .8);
+            display: none;
+
+
+            li {
+                float: left;
+                width: 25%;
+                height: 135/@rem;
+                line-height: 135/@rem;
+                font-size: 50/@rem;
+                text-align: center;
+
+                a {
+                    color: #fff;
                 }
             }
         }

@@ -1,0 +1,35 @@
+.px-1(@color) {
+    position: relative;
+
+    &::before {
+        //1物理元素的横线，相对于父元素定位
+        position: absolute;
+        content: "";
+        display: block;
+        top: 0;
+        width: 100%;
+        background: @color;
+        height: 1px;
+
+        //根据不同屏幕尺寸去适应
+        @media only screen and (-webkit-device-pixel-ratio:2) {
+            transform: scaleY(.5);
+        }
+
+        ;
+
+        @media only screen and (device-pixel-ratio:2) {
+            transform: scaleY(.5);
+        }
+
+        ;
+
+        @media only screen and (device-pixel-ratio:3) {
+            transform: scaleY(.33333333);
+        }
+
+        @media only screen and (-webkit-device-pixel-ratio:3) {
+            transform: scaleY(.33333333);
+        }
+    }
+}
