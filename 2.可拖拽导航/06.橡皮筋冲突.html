@@ -1,0 +1,419 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-29 15:03:24
+ * @LastEditTime: 2020-07-31 14:47:38
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /javaWebLearning/谷粒音乐/exercise/项目/02_使用绝对定位来模拟固定定位.html
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0" />
+    <title></title>
+    <link rel="stylesheet" href="./css/tai.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="head">
+            <div class="head-top">
+                <!-- logo -->
+                <h1 class="logo">
+                    <a href="http://www.atguigu.com">
+                        <!-- 对图片进行适配，需要设计图尺寸进行计算 -->
+                        <img src="./img/logo.png" alt="">
+                    </a>
+                </h1>
+                <!-- 面包屑导航breadcrumbs -->
+                <a href="javascript:;" class="head-breadcrumbs">
+
+                </a>
+                <!-- 按钮排 -->
+                <div class="head-btns">
+                    <a href="javascript:;" class="search">搜索</a>
+                    <a href="javascript:;" class="login">登陆</a>
+                    <a href="javascript:;" class="register">注册</a>
+                </div>
+            </div>
+            <div class="head-bottom">
+                <form action="" method="POST">
+                    <input type="text" placeholder="请输入关键字">
+                    <input type="submit" value="搜索">
+                </form>
+            </div>
+            <!-- 下拉框 -->
+            <ul class="head-mask">
+                <li>
+                    <a href="javascript:;">首页</a>
+                </li>
+                <li>
+                    <a href="javascript:;">MV</a>
+                </li>
+                <li>
+                    <a href="javascript:;">音乐</a>
+                </li>
+                <li>
+                    <a href="javascript:;">商城</a>
+                </li>
+                <li>
+                    <a href="javascript:;">V榜</a>
+                </li>
+                <li>
+                    <a href="javascript:;">节目</a>
+                </li>
+                <li>
+                    <a href="javascript:;">饭团</a>
+                </li>
+                <li>
+                    <a href="javascript:;">咨询</a>
+                </li>
+                <li>
+                    <a href="javascript:;">APP下载</a>
+                </li>
+                <li>
+                    <a href="javascript:;">热门应用</a>
+                </li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="nav">
+                <ul class="nav-items">
+                    <li class="active">
+                        <a href="javascript:;">首页</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">MV</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">音乐</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">商城</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">V榜</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">节目</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">饭团</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">咨询</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">APP下载</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">热门应用</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">1111</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">222</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">333</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">444</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">555</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">666</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">777</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">888</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">999</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./js/tools.js"></script>
+<script src="./js/damu.js"></script>
+<script type="text/javascript">
+    /* 
+	滚动条思路：
+	1.禁止系统滚动条--ev.preventDefault()
+	2.让滚动条出现在一个顶层元素（最外层元素）上，此时滚动条滚动的是顶层元素，而初始化块不受影响
+	而绝对定位元素是相对于初始化块定位，所以位置也不会随着滚动条滚动而变化
+	
+	 */
+    window.onload = function () {
+        document.addEventListener("touchstart", function (ev) {
+            ev = ev || event;
+            //注意：小型项目时可以不用禁止，不然需要自己写所有的默认行为
+            ev.preventDefault();
+        }, {
+            passive: false
+        })
+
+        ;
+        (function () { //适配rem
+            let styleNode = document.createElement("style");
+            let w = document.documentElement.clientWidth / 16;
+            styleNode.innerHTML = "html{font-size:" + w + "px!important}";
+            document.head.appendChild(styleNode);
+        })()
+
+        ;
+
+        drag();
+
+        function drag() {
+            //滑屏区域
+            let wrap = document.querySelector(".nav");
+            //滑屏元素
+            let item = document.querySelector(".nav-items");
+            //元素一开始的位置  手指一开始的位置
+            let startX = 0;
+            let elementX = 0;
+            //元素能滑动的最大距离（负值）
+            let minX = wrap.clientWidth - item.offsetWidth;
+
+
+            //快速滑屏需要的参数
+            let lastTime = 0 //初始为触发touchstart时的时间点，后面为每次触发上一次touchmove时的时间点
+            let currentTime = 0 //初始为第一次触发touchmove时的时间点，后面为每次触发当前touchmove时的时间点
+            let lastPoint = 0
+            let currentPoint = 0
+            //记录时间差，因为它会作为分母所以最小值用1
+            let timeDiff = 1
+            //记录距离差
+            let pointDiff = 0
+
+            wrap.addEventListener("touchstart", function (ev) {
+                ev = ev || event;
+                let touchC = ev.changedTouches[0];
+
+                startX = touchC.clientX;
+                elementX = damu.css(item, "translateX");
+                //取消过渡效果
+                item.style.transition = "none";
+
+                //取得触发时间
+                lastTime = new Date().getTime()
+                //取得触发时手指位置
+                lastPoint = touchC.clientX;
+
+                //清除速度的残留值
+                pointDiff = 0
+
+            })
+
+            wrap.addEventListener("touchmove", function (ev) {
+                ev = ev || event;
+                let touchC = ev.changedTouches[0];
+                //当前手指位置
+                let nowX = touchC.clientX;
+                //手指滑动的实际距离
+                let disX = nowX - startX;
+                //元素需要滑动的x值
+                let translateX = elementX + disX
+
+                /* 
+                   快速滑屏需要的参数
+                 */
+                //取得当前时间点
+                currentTime = new Date().getTime()
+                //取得手指当前位置
+                currentPoint = touchC.clientX;
+                //计算时间差和距离差
+                timeDiff = currentTime - lastTime
+                pointDiff = currentPoint - lastPoint
+                //让上一次touchmove的currentTime,currentPoint变成下一次的lastTime，lastPoint
+                //这样到了touchend里时拿到的就是最后一次的lastTime ， currentTime,lastPoint ，currentPoint
+                lastTime = currentTime
+                lastPoint = currentPoint
+
+                /*手动橡皮筋效果
+                 * 
+                 * 在move的过程中，每一次touchmove真正的有效距离慢慢变小，
+                 元素的滑动距离还是在变大
+                 * 
+                 * */
+                if (translateX > 0) {
+                    item.handMove = true //当手动滑屏时（非快速滑屏），只触发手动滑屏的橡皮筋效果，禁止快速滑屏的橡皮筋效果
+                    //每次滑动的有效距离会变得越来越小，所以disX越来越小
+                    //scale值控制在0-0.5之间
+                    let scale = document.documentElement.clientWidth / ((document.documentElement
+                        .clientWidth + translateX) * 2);
+                    translateX = damu.css(item, 'translateX') + pointDiff * scale;
+                    //translateX=0;
+                } else if (translateX < minX) {
+                    item.handMove = true
+                    //over为滑到最末后，手指继续往左滑的距离
+                    //over计算见img里图片示意
+                    let over = minX - translateX;
+                    let scale = document.documentElement.clientWidth / ((document.documentElement
+                        .clientWidth + over) * 2);
+                    translateX = damu.css(item, 'translateX') + pointDiff * scale;
+                    //translateX = minX;
+                }
+                //translateX = elementX + disX*scale;
+                damu.css(item, "translateX", translateX);
+
+
+            })
+
+            wrap.addEventListener("touchend", function (ev) {
+                let translateX = damu.css(item, "translateX");
+                if (!item.handMove) { //当此时为快速滑屏时，触发快速滑屏的效果
+                    //最后一次touchmove的平均速度即为距离差除以时间差
+                    //速度越大，滑动的位移应该越远
+                    let speed = pointDiff / timeDiff
+                    //让轻轻滑动（正常滑动）时，不触发快速滑屏的动画效果
+                    speed = Math.abs(speed)
+                    speed = speed < 0.5 ? 0 : speed
+                    let targetX = translateX + speed * 200
+
+                    /* 
+
+                    通过cubic-bezier动画效果实现快速滑屏时
+                    滑到最左或者最右后滑出一截又慢慢回来的效果
+
+                     */
+                    let bezier = ""
+                    //根据滑动的速度设置动画效果的时间，滑动越快，时间越长
+                    let time = Math.abs(speed) * 0.2
+                    time = time < 1 ? 1 : time
+                    time = time > 3 ? 3 : time
+                    //快速滑屏的橡皮筋效果
+                    if (targetX > 0) {
+                        targetX = 0;
+                        bezier = "cubic-bezier(.26,1.51,.68,1.54)"
+                    } else if (targetX < minX) {
+                        targetX = minX;
+                        bezier = "cubic-bezier(.26,1.51,.68,1.54)"
+                    }
+                    //过渡效果
+                    item.style.transition = time + "s " + bezier + " transform ";
+                    damu.css(item, "translateX", targetX);
+                } else { //当前为手动滑屏时，触发手动滑屏的效果
+                    item.style.transition = "1s transform"
+                    if (translateX > 0) {
+                        translateX = 0
+                        damu.css(item, "translateX", translateX);
+                    } else if (translateX < minX) {
+                        translateX = minX
+                        damu.css(item, "translateX", translateX);
+
+                    }
+
+                }
+
+            })
+        }
+    }
+
+
+    changeFocus()
+    /* 
+    
+    此功能需要在真机上调试
+    
+     */
+    function changeFocus() { //因为禁止了全局默认行为，所以css里写的focus事件就被禁止了
+        //点击文本输入框时，聚焦
+        let inputTextNode = document.querySelector('input[type="text"]')
+        inputTextNode.addEventListener('touchstart', (ev) => {
+            ev = ev || event
+            this.focus()
+            ev.stopPropagation()
+            ev.preventDefault()
+        })
+        //点击其它地方时，失焦
+        document.addEventListener('touchstart', () => {
+            inputTextNode.blur()
+        })
+
+    }
+
+
+    CMCFMenuBtn()
+
+    function CMCFMenuBtn() {
+        //面包屑按钮切换图片
+        let breadcrumbsNode = document.querySelector('.head-breadcrumbs')
+        // console.log(breadcrumbsNode);
+        let ulNode = document.querySelector('.head-mask')
+        let flag = false //false为面包屑未被点开时
+        breadcrumbsNode.addEventListener('touchstart', (ev) => {
+            ev = ev || event
+            //拿到手指的初始位置
+            let touchC = ev.changedTouches[0]
+            if (!flag) { //当面包屑被点开时,图片切换为x图片，并显示下拉框
+
+                //classList的兼容性不好，改为自己写的js方法
+                tools.addClass(breadcrumbsNode, 'active')
+
+                ulNode.style.display = "block"
+            } else { //当面包屑未被点开时,图片切换为面包屑图片，并隐藏下拉框
+
+                // breadcrumbsNode.classList.remove('active')
+                tools.removeClass(breadcrumbsNode, 'active')
+
+                ulNode.style.display = "none"
+            }
+
+            flag = !flag
+
+            //由于这个事件与下面的document事件因为冒泡而冲突了，所以需要关闭此事件的冒泡
+            ev.stopPropagation()
+            //每次阻止冒泡后都需要再加上全面禁止默认事件，否则当前节点会因为阻止冒泡而默认没有禁止
+            ev.preventDefault()
+        })
+
+
+        //当在x图片时，如果点击屏幕的其它区域，下拉框会消失,x图片变成breadcrumbs
+        document.addEventListener('touchstart', () => {
+            if (flag) {
+                tools.removeClass(breadcrumbsNode, 'active')
+                ulNode.style.display = "none"
+                flag = !flag
+            }
+        })
+
+        //在下拉框展示出来时点击下拉框上的其它空白区域，下拉框不消失
+        ulNode.addEventListener('touchstart', (ev) => {
+            ev = ev || event
+            ev.stopPropagation()
+            //每次阻止冒泡后都需要再加上全面禁止默认事件，否则当前节点会因为阻止冒泡而默认没有禁止
+            ev.preventDefault()
+        })
+    }
+
+    /* 
+    nav导航的滑屏，橡皮筋效果，
+    快速滑屏和快速滑屏的橡皮筋效果
+    的实现
+     */
+
+
+    //点击切换nav-items里元素的样式
+    changeStyle()
+
+    function changeStyle() {
+        //选择所有li元素
+        //let liNodes = document.querySelectorAll('.nav-items>li')
+
+    }
+</script>
+
+</html>
